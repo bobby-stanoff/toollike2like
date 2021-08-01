@@ -1,6 +1,8 @@
+from _typeshed import Self
 import time #thêm time
 import os
 import sys
+import random
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -114,7 +116,24 @@ time.sleep(3)
 #     'accFB' : '',
 #     'accTTC' : ''
 # }
+class DemJobCount:
 
+    def __init__(self,r = 0,i = 0):
+        self.joblike = r
+        self.jobfollow = i
+
+    def getData(self, job):
+        if job == 'follow':
+            return self.jobfollow
+        else:
+            return self.joblike
+    def increaseJob(self, job):
+        if job == 'follow':
+            self.jobfollow +=1
+        else:
+            self.joblike +=1
+
+DemJob = DemJobCount()
 
 def ThoatChuongTrinh(message = ''): # dung quan tam lam gi 
     print('----------------------------------')
@@ -148,7 +167,7 @@ def LamJobLike(xuGioiHan):    # tao ham de chon mode like hay follow
             try:
                 driver.switch_to.window(driver.window_handles[-1]) # chuyen sang tab moi mo
                 likeButton =  WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "[class='rq0escxv l9j0dhe7 du4w35lb j83agx80 cbu4d94t pfnyh3mw d2edcug0 hpfvmrgz ph5uu5jm b3onmgus iuny7tx3 ipjc6fyt']"))) #nut like
-                time.sleep(DELAYTIME) #cho 
+                time.sleep(DELAYTIME + round(random.uniform(1.00, 4.00), 3)) #cho 
                 likeButton.click() #nhan nut like
             except: # neu link loi thi thuc hien dong nay
                 LINKloi += 1 
@@ -167,8 +186,9 @@ def LamJobLike(xuGioiHan):    # tao ham de chon mode like hay follow
                 print('ko nhan tien')
                 break # thoat khoi vong lap
             time.sleep(1)
+            DemJob.increaseJob('like')
             soCash = driver.find_element_by_id('soduchinh').text # so xu hien co
-            print(f'so xu hien tai: {soCash}') # in ra so xu hien co
+            print(f'[{DemJob.getData("like")}] so xu hien tai: {soCash}') # in ra so xu hien co
             if int(soCash) >= xuGioiHan:
                 ThoatChuongTrinh()
             time.sleep(2)
@@ -208,7 +228,7 @@ def LamJobFollow(xuGioiHan):
                 followButton1 =  WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="root"]/div[1]/div[1]/div[3]/table/tbody/tr/td[2]/a')))
                 time.sleep(1) 
                 followButton2 =  WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="root"]/div[1]/div[1]/div[3]/table/tbody/tr/td[3]/a')))
-                time.sleep(DELAYTIME)
+                time.sleep(DELAYTIME + round(random.uniform(1.00, 4.00), 3)) #cho 
                 if followButton1.text in ['Theo dõi','Follow']:
                     followButton1.click()
                 else:
@@ -229,8 +249,9 @@ def LamJobFollow(xuGioiHan):
                 print('ko nhan tien')
                 break
             time.sleep(1)
+            DemJob.increaseJob('follow')
             soCash = driver.find_element_by_id('soduchinh').text
-            print(f'so xu hien tai: {soCash}')
+            print(f'[{DemJob.getData("follow")}] so xu hien tai: {soCash}')
             if int(soCash) >= xuGioiHan:
                 ThoatChuongTrinh()
             time.sleep(2)
