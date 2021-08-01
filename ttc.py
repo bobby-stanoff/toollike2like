@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import NoSuchElementException        
 ###################PHAN IN RA MAN HINH#############
 print("""\
 
@@ -78,7 +79,22 @@ time.sleep(1)
 driver.find_element_by_id('pass').send_keys(b) #PASS facebook
 time.sleep(1)
 driver.find_element_by_name('login').click()
-time.sleep(3)
+time.sleep(2)
+def check_login():
+    try:
+        driver.find_element_by_id('ssrb_top_nav_end')
+        time.sleep(1)
+        
+    except NoSuchElementException:
+       
+        return False
+    return True
+if check_login():
+    print('login thanh cong')
+else:
+    print('login bi loi')
+    sys.exit()
+time.sleep(1)
 driver.get('https://tuongtaccheo.com/') #chạy ttc
 time.sleep(2)
 driver.execute_script('document.querySelector("#memberModal > div > div > div.modal-footer > div > button").click()')
